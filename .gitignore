@@ -1,0 +1,23 @@
+# Dependencies
+node_modules/
+mobile/node_modules/
+
+# Env / secrets — NE JAMAIS committer
+.env
+.env*.local
+mobile/.env
+
+# Expo / build
+mobile/dist/
+mobile/.expo/
+dist/
+*.tsbuildinfo
+
+# OS / éditeur
+.DS_Store
+*.log
+.idea/
+.vscode/
+
+# Claude
+.claude/settings.local.json

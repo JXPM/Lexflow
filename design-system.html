@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>LexFlow — Design System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .ds { max-width: 1080px; margin: 0 auto; padding: 48px 24px 96px; position: relative; z-index: 1; }
+    .ds section { margin-top: 56px; }
+    .swatch { height: 96px; border-radius: var(--r-md); border: 1px solid var(--border); display: flex; align-items: flex-end; padding: 10px; font-size: 12px; font-weight: 600; }
+    .spec { font-family: ui-monospace, monospace; font-size: 12px; color: var(--muted); }
+    .type-row { display: flex; align-items: baseline; gap: 16px; padding: 12px 0; border-bottom: 1px solid var(--border); }
+  </style>
+</head>
+<body>
+<div class="ds">
+  <a class="btn btn--ghost" href="index.html" style="padding:8px 14px">← Retour au prototype</a>
+
+  <header style="margin-top:24px">
+    <p class="eyebrow">Design System</p>
+    <h1 class="h1">LexFlow UI Kit</h1>
+    <p class="muted">Minimaliste premium · Light · Apple-like · Audio-first. Tokens prêts pour Figma (Tokens Studio).</p>
+  </header>
+
+  <!-- COULEURS -->
+  <section>
+    <h2 class="h2">Couleurs</h2>
+    <div class="grid grid-4" style="margin-top:24px">
+      <div class="swatch" style="background:#F5F5F7;color:#1D1D1F;border:1px solid rgba(0,0,0,.08)">Background<br><span class="spec">#F5F5F7</span></div>
+      <div class="swatch" style="background:#FFFFFF;color:#1D1D1F;border:1px solid rgba(0,0,0,.08)">Surface<br><span class="spec">#FFFFFF</span></div>
+      <div class="swatch" style="background:#0071E3;color:#fff">Primary<br><span class="spec">#0071E3</span></div>
+      <div class="swatch" style="background:#0077ED;color:#fff">Secondary<br><span class="spec">#0077ED</span></div>
+      <div class="swatch" style="background:#BF5AF2;color:#fff">Accent<br><span class="spec">#BF5AF2</span></div>
+      <div class="swatch" style="background:#FF3B30;color:#fff">Error<br><span class="spec">#FF3B30</span></div>
+      <div class="swatch" style="background:#34C759;color:#fff">Success<br><span class="spec">#34C759</span></div>
+      <div class="swatch" style="background:#6E6E73;color:#fff">Muted<br><span class="spec">#6E6E73</span></div>
+    </div>
+  </section>
+
+  <!-- TYPOGRAPHIE -->
+  <section>
+    <h2 class="h2">Typographie — Inter</h2>
+    <div class="card" style="margin-top:24px">
+      <div class="type-row"><span class="h1">Aa</span><div><div class="h1" style="font-size:48px">Heading 1</div></div><span class="spec grow" style="text-align:right">48 / 800</span></div>
+      <div class="type-row"><span class="h2">Aa</span><div class="h2" style="font-size:32px">Heading 2</div><span class="spec grow" style="text-align:right">32 / 700</span></div>
+      <div class="type-row"><span class="h3">Aa</span><div class="h3" style="font-size:24px">Heading 3</div><span class="spec grow" style="text-align:right">24 / 600</span></div>
+      <div class="type-row"><span class="body">Aa</span><div class="body">Body — texte courant</div><span class="spec grow" style="text-align:right">16 / 400</span></div>
+      <div class="type-row"><span class="caption">Aa</span><div class="caption">Caption — légendes</div><span class="spec grow" style="text-align:right">14 / 400</span></div>
+    </div>
+  </section>
+
+  <!-- BOUTONS -->
+  <section>
+    <h2 class="h2">Boutons</h2>
+    <div class="card row gap-3 wrap" style="margin-top:24px">
+      <button class="btn btn--primary">Primary</button>
+      <button class="btn btn--secondary">Secondary</button>
+      <button class="btn btn--accent">Accent</button>
+      <button class="btn btn--ghost">Ghost</button>
+      <button class="btn btn--primary" disabled>Disabled</button>
+      <button class="btn--icon" aria-label="icon">▶</button>
+    </div>
+  </section>
+
+  <!-- INPUTS / TABS / CHIPS -->
+  <section>
+    <h2 class="h2">Saisie & navigation</h2>
+    <div class="grid grid-2" style="margin-top:24px">
+      <div class="card col gap-4">
+        <div class="field"><label class="label">Champ texte</label><input class="input" placeholder="Tape un mot…"></div>
+        <div class="search">🔍<input placeholder="Recherche…"></div>
+      </div>
+      <div class="card col gap-4">
+        <div class="tabs"><button class="tab" aria-selected="true">Semaine</button><button class="tab" aria-selected="false">Mois</button></div>
+        <div class="row gap-2 wrap"><span class="chip" aria-pressed="true">Tous</span><span class="chip">Enregistrés</span><span class="chip">À revoir</span></div>
+        <div class="row gap-3"><span class="toggle" role="switch" aria-checked="true"></span><span class="toggle" role="switch" aria-checked="false"></span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROGRESS / BADGES -->
+  <section>
+    <h2 class="h2">Progression & badges</h2>
+    <div class="card col gap-4" style="margin-top:24px">
+      <div class="progress"><span style="width:68%"></span></div>
+      <div class="progress progress--thin"><span style="width:40%"></span></div>
+      <div class="row gap-2 wrap">
+        <span class="badge badge--success">✓ Success</span>
+        <span class="badge badge--accent">★ Accent</span>
+        <span class="badge badge--muted">Muted</span>
+        <span class="badge badge--streak">🔥 Série 12</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMPOSANTS CLÉS -->
+  <section>
+    <h2 class="h2">Composants signature</h2>
+    <div class="grid grid-2" style="margin-top:24px">
+      <div class="card col gap-3 center" style="text-align:center">
+        <p class="eyebrow">Player audio</p>
+        <div class="row gap-3 center">
+          <span class="wave"><i></i><i></i><i></i><i></i><i></i><i></i></span>
+          <span class="audio-btn">▶</span>
+        </div>
+        <p class="caption muted">Bouton audio + onde animée</p>
+      </div>
+      <div class="card col gap-3 center" style="text-align:center">
+        <p class="eyebrow">Anneau de progression</p>
+        <div class="ring"><svg width="132" height="132" viewBox="0 0 132 132"><circle class="track" cx="66" cy="66" r="52"/><circle class="bar" cx="66" cy="66" r="52" stroke-dasharray="326" stroke-dashoffset="100"/></svg><div class="ring__label"><strong class="h3">70%</strong><span class="caption">objectif</span></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ESPACEMENT / RADIUS -->
+  <section>
+    <h2 class="h2">Espacement & rayons</h2>
+    <div class="card row gap-4 wrap" style="margin-top:24px;align-items:flex-end">
+      <div class="spec">4 8 12 16 24 32 48 64 px — base 8</div>
+    </div>
+    <div class="row gap-4 wrap" style="margin-top:16px">
+      <div class="tile center" style="width:80px;height:80px;border-radius:10px">10</div>
+      <div class="tile center" style="width:80px;height:80px;border-radius:16px">16</div>
+      <div class="tile center" style="width:80px;height:80px;border-radius:24px">24</div>
+      <div class="tile center" style="width:80px;height:80px;border-radius:999px">full</div>
+    </div>
+  </section>
+</div>
+</body>
+</html>
