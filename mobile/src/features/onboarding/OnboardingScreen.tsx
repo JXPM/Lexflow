@@ -126,7 +126,13 @@ export default function OnboardingScreen() {
         <Text className="text-caption text-muted">
           Étape {step + 1} / {STEPS.length}
         </Text>
-        <Pressable onPress={() => router.replace("/(tabs)")}>
+        <Pressable
+          onPress={() => {
+            // Skipping still counts as onboarded — keep store defaults, just flag it.
+            completeOnboarding({});
+            router.replace("/(tabs)");
+          }}
+        >
           <Text className="text-caption text-primary font-semibold">Passer</Text>
         </Pressable>
       </View>

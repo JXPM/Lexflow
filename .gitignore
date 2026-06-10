@@ -21,3 +21,6 @@ dist/
 
 # Claude
 .claude/settings.local.json
+
+# Obsidian per-user editor state (vault config/workspace)
+.obsidian/
