@@ -10,8 +10,11 @@ sources: ["[[2026-06-10-lexflow-prototype]]"]
 # LexFlow
 
 App d'**apprentissage du vocabulaire, audio-first**, esthétique minimaliste premium
-« Apple » (SF Pro, bleu `#0071E3`). Slogan : « Apprends des mots sans avoir l'impression
-d'étudier. » ([[2026-06-10-lexflow-prototype]])
+« Apple » (SF Pro, bleu `#0071E3`). ([[2026-06-10-lexflow-prototype]])
+
+**Tagline (2026-06-10)** : « Your words, in motion. » (nouveau logo, [[2026-06-10-brand-logo]]) —
+remplace le slogan FR historique « Apprends des mots sans avoir l'impression d'étudier. ».
+Voir [[identite-visuelle]] (palette + divergence de marque à réconcilier).
 
 ## Proposition de valeur
 Rendre l'acquisition de vocabulaire aussi fluide et addictive qu'un feed social, en mettant

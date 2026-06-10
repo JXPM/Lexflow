@@ -7,7 +7,7 @@ updated: 2026-06-10
 # Index — Second cerveau LexFlow
 
 Catalogue de toutes les pages. Mis à jour à chaque `/ingest` et `/save`.
-**1 source · 7 concepts/entités · 1 synthèse.**
+**2 sources · 8 concepts/entités · 1 synthèse.**
 
 ## Overview
 - [[overview]] — thèse produit + état du savoir
@@ -21,9 +21,11 @@ Catalogue de toutes les pages. Mis à jour à chaque `/ingest` et `/save`.
 - [[repetition-espacee]] — SRS, révision à intervalles croissants
 - [[rappel-actif]] — récupération active en mémoire (quiz)
 - [[gamification]] — XP, niveau, série, badges
+- [[identite-visuelle]] — marque : wordmark, tagline « Your words, in motion. », palette
 
 ## Sources
 - [[2026-06-10-lexflow-prototype]] — snapshot fondateur du prototype (web + mobile) · 2026-06-10
+- [[2026-06-10-brand-logo]] — nouveau logo + tagline EN + palette extraite · 2026-06-10
 
 ## Synthèses
 - [[audit-ui-2026-06-10]] — audit UI/UX du prototype web (Playwright + ui-ux-pro-max) · 2026-06-10
