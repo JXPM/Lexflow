@@ -59,21 +59,51 @@
   </defs>
 </svg>
 
-<!-- ============ SPLASH ============ -->
-<section id="splash" class="fullscreen is-open" aria-label="Écran d'accueil">
-  <div class="splash__logo col center gap-4">
-    <svg class="brand__mark" width="84" height="84" viewBox="0 0 48 48" fill="none">
-      <rect x="3" y="3" width="42" height="42" rx="13" fill="url(#logoGrad)"/>
-      <path d="M16 14v20M16 14h10M16 23h8M16 34l11-7" stroke="#04140F" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>
-    <h1 class="h1">LexFlow</h1>
-    <p class="muted" style="max-width:340px">Apprends des mots sans avoir l'impression d'étudier.</p>
+<!-- ============ LANDING (aura.build style) ============ -->
+<section id="splash" class="fullscreen landing is-open" aria-label="Accueil LexFlow">
+  <div class="aurora" aria-hidden="true">
+    <span class="aurora__blob a1"></span>
+    <span class="aurora__blob a2"></span>
+    <span class="aurora__blob a3"></span>
+    <div class="aurora__grid"></div>
   </div>
-  <div class="col gap-3" style="width:min(320px,100%)">
-    <button class="btn btn--primary btn--lg btn--block" onclick="startOnboarding()">
-      Commencer <svg width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#i-arrow-right"/></svg>
-    </button>
-    <button class="btn btn--ghost btn--block" onclick="skipToApp()">J'ai déjà un compte</button>
+
+  <div class="landing__inner" id="landingParallax">
+    <div class="brand brand--center" data-pf="6">
+      <svg class="brand__mark" width="40" height="40" viewBox="0 0 48 48" fill="none">
+        <rect x="3" y="3" width="42" height="42" rx="13" fill="url(#logoGrad)"/>
+        <path d="M16 14v20M16 14h10M16 23h8M16 34l11-7" stroke="#04140F" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span class="brand__name">LexFlow</span>
+    </div>
+
+    <span class="pill" data-pf="10">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#i-sparkle"/></svg>
+      Vocabulaire premium, sans effort
+    </span>
+
+    <h1 class="landing__title" data-pf="16">
+      Apprends des mots <span class="grad-text">sans avoir l'impression d'étudier.</span>
+    </h1>
+
+    <p class="landing__sub" data-pf="22">
+      Un feed audio-first, immersif. Écoute, ressens, retiens — comme un réseau social,
+      mais pour ton vocabulaire.
+    </p>
+
+    <div class="landing__cta" data-pf="28">
+      <button class="btn btn--primary btn--lg" onclick="startOnboarding()">
+        Commencer gratuitement
+        <svg width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#i-arrow-right"/></svg>
+      </button>
+      <button class="btn btn--glass btn--lg" onclick="skipToApp()">J'ai déjà un compte</button>
+    </div>
+
+    <div class="landing__stats" data-pf="34">
+      <div><strong>12 000+</strong><span>mots</span></div>
+      <div><strong>4.9★</strong><span>note moyenne</span></div>
+      <div><strong>100%</strong><span>audio-first</span></div>
+    </div>
   </div>
 </section>
 

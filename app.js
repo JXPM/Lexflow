@@ -23,23 +23,58 @@ const STATE = {
 const WORDS = [
   { id:'serendipite', term:'Sérendipité', pos:'n.f.', phon:'/se.ʁɛ̃.di.pi.te/',
     def:'Le fait de faire une découverte heureuse et inattendue par hasard.',
-    ex:'Une simple sérendipité l’a conduite vers sa véritable vocation.', tag:'Rare' },
+    ex:'Une simple sérendipité l’a conduite vers sa véritable vocation.', tag:'Rare',
+    img:'sunrise discovery golden path' },
   { id:'eloquence', term:'Éloquence', pos:'n.f.', phon:'/e.lɔ.kɑ̃s/',
     def:'L’art de s’exprimer avec aisance et de convaincre par la parole.',
-    ex:'Son éloquence a captivé toute la salle en quelques minutes.', tag:'Soutenu' },
+    ex:'Son éloquence a captivé toute la salle en quelques minutes.', tag:'Soutenu',
+    img:'microphone stage spotlight speaker' },
   { id:'resilience', term:'Résilience', pos:'n.f.', phon:'/ʁe.zi.ljɑ̃s/',
     def:'Capacité à surmonter une épreuve et à se reconstruire.',
-    ex:'La résilience de l’équipe a impressionné tout le monde.', tag:'Courant' },
+    ex:'La résilience de l’équipe a impressionné tout le monde.', tag:'Courant',
+    img:'mountain climber summit sunrise' },
   { id:'ephemere', term:'Éphémère', pos:'adj.', phon:'/e.fe.mɛʁ/',
     def:'Qui ne dure qu’un temps très court.',
-    ex:'Le bonheur éphémère d’un matin d’été.', tag:'Poétique' },
+    ex:'Le bonheur éphémère d’un matin d’été.', tag:'Poétique',
+    img:'cherry blossom petals falling' },
   { id:'perspicace', term:'Perspicace', pos:'adj.', phon:'/pɛʁ.spi.kas/',
     def:'Qui comprend les choses avec finesse et rapidité.',
-    ex:'Une remarque perspicace qui change tout le débat.', tag:'Soutenu' },
+    ex:'Une remarque perspicace qui change tout le débat.', tag:'Soutenu',
+    img:'macro eye sharp focus clarity' },
   { id:'quietude', term:'Quiétude', pos:'n.f.', phon:'/kje.tyd/',
     def:'État de calme paisible et de tranquillité d’esprit.',
-    ex:'Il retrouve la quiétude dès qu’il marche en forêt.', tag:'Rare' },
+    ex:'Il retrouve la quiétude dès qu’il marche en forêt.', tag:'Rare',
+    img:'calm misty forest lake fog' },
 ];
+
+/* ---------- PEXELS (photos du feed) ----------
+   Clé gratuite : https://www.pexels.com/api/  — puis, au choix :
+     • console : localStorage.setItem('pexels_key', 'TA_CLE')  (recommandé, hors git)
+     • ou définir window.PEXELS_API_KEY avant app.js
+   Sans clé : on garde le mesh gradient (le feed ne casse jamais). */
+const PEXELS_API_KEY =
+  (typeof window !== 'undefined' && window.PEXELS_API_KEY) ||
+  (typeof localStorage !== 'undefined' && localStorage.getItem('pexels_key')) || '';
+const isPexelsConfigured = Boolean(PEXELS_API_KEY);
+const _pexelsCache = new Map();
+async function fetchPexelsImage(query) {
+  if (!PEXELS_API_KEY) return null;
+  if (_pexelsCache.has(query)) return _pexelsCache.get(query);
+  try {
+    const url = `https://api.pexels.com/v1/search?query=${encodeURIComponent(query)}&per_page=5&orientation=landscape`;
+    const res = await fetch(url, { headers: { Authorization: PEXELS_API_KEY } });
+    if (!res.ok) throw new Error(`Pexels ${res.status}`);
+    const data = await res.json();
+    const photo = data.photos?.[0];
+    const src = photo ? (photo.src.large2x || photo.src.landscape) : null;
+    _pexelsCache.set(query, src);
+    return src;
+  } catch (e) {
+    console.warn('[pexels] échec', query, e);
+    _pexelsCache.set(query, null);
+    return null;
+  }
+}
 
 const BADGES = [
   { name:'Première semaine', earned:true, icon:'i-flame' },
@@ -232,9 +267,32 @@ function wordCardHTML(w) {
   </article>`;
 }
 function toggleSave(id, btn) {
-  if (STATE.saved.has(id)) { STATE.saved.delete(id); btn.classList.remove('is-saved'); btn.innerHTML = `${icon('i-bookmark',18)} Enregistrer`; }
-  else { STATE.saved.add(id); btn.classList.add('is-saved'); btn.innerHTML = `${icon('i-bookmark',18)} Enregistré`; toast('Ajouté au carnet ✓'); }
+  const has = STATE.saved.has(id);
+  if (has) STATE.saved.delete(id);
+  else { STATE.saved.add(id); toast('Ajouté au carnet ✓'); }
+  const saved = !has;
+  if (!btn) return;
+  btn.classList.toggle('is-saved', saved);
+  const span = btn.querySelector('span');
+  if (span) span.textContent = saved ? 'Enregistré' : 'Garder';      // rail immersif
+  else btn.innerHTML = `${icon('i-bookmark', 18)} ${saved ? 'Enregistré' : 'Enregistrer'}`; // carte texte
 }
+
+/** Parallaxe douce de la landing au mouvement de la souris (respecte reduced-motion). */
+function initLanding() {
+  const sec = document.getElementById('splash');
+  if (!sec || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const layers = [...sec.querySelectorAll('[data-pf]'), ...sec.querySelectorAll('.aurora__blob')];
+  sec.addEventListener('pointermove', (e) => {
+    const cx = e.clientX / window.innerWidth - 0.5;
+    const cy = e.clientY / window.innerHeight - 0.5;
+    layers.forEach((el, i) => {
+      const f = el.dataset.pf ? Number(el.dataset.pf) : (i + 1) * 14;
+      el.style.transform = `translate3d(${cx * f}px, ${cy * f}px, 0)`;
+    });
+  });
+}
+initLanding();
 
 /* =============================================================
    VIEW: DASHBOARD
@@ -277,7 +335,7 @@ VIEWS.dashboard = () => {
       <div class="row between"><p class="eyebrow">Mot du jour</p>${icon('i-sparkle',18)}</div>
       <div class="row gap-3" style="align-items:baseline">
         <span class="h3" style="font-weight:800">${w.term}</span>
-        <button class="audio-btn" style="width:40px;height:40px" aria-label="Écouter" onclick="speak('${w.term}', this)">${icon('i-volume',18)}</button>
+        <button class="audio-btn" style="width:44px;height:44px" aria-label="Écouter ${w.term}" onclick="speak('${w.term}', this)">${icon('i-volume',18)}</button>
       </div>
       <p class="caption phon">${w.phon}</p>
       <p class="muted">${w.def}</p>
@@ -312,31 +370,81 @@ function greet() { const h = new Date().getHours(); return h < 12 ? 'Bonne matin
    VIEW: DÉCOUVERTE (feed) — avec état chargement
    ============================================================= */
 VIEWS.discover = () => `
-  <header class="page-head">
-    <p class="eyebrow">Feed</p>
-    <h1 class="h1">Découverte</h1>
-    <p class="muted">Fais défiler. Écoute. Garde ce qui te plaît.</p>
-  </header>
-  <div class="feed" id="feed">
-    ${skeletonCard()}${skeletonCard()}
+  <div class="feed-immersive" id="feed">
+    <div class="slide slide--skeleton"><div class="skeleton" style="position:absolute;inset:0"></div></div>
   </div>`;
 VIEWS.discoverInit = () => {
-  // simule un chargement réseau → état skeleton puis contenu
+  // simule un chargement réseau → état skeleton puis feed immersif
   setTimeout(() => {
     const feed = document.getElementById('feed');
     if (!feed) return;
-    feed.innerHTML = WORDS.map(wordCardHTML).join('') +
-      `<p class="scroll-hint caption">${icon('i-arrow-right',16)} Continue à défiler</p>`;
-  }, 850);
+    feed.innerHTML = WORDS.map(slideHTML).join('');
+    initFeedParallax(feed);
+    loadFeedPhotos(feed);
+  }, 700);
 };
-function skeletonCard() {
-  return `<div class="card col gap-4">
-    <div class="skeleton" style="height:20px;width:40%"></div>
-    <div class="skeleton" style="height:44px;width:70%"></div>
-    <div class="skeleton" style="height:14px;width:90%"></div>
-    <div class="skeleton" style="height:14px;width:80%"></div>
-    <div class="skeleton" style="height:40px;width:100%;border-radius:var(--r-full)"></div>
-  </div>`;
+/** Charge une vraie photo Pexels par slide et la fait apparaître en crossfade. */
+function loadFeedPhotos(feed) {
+  if (!isPexelsConfigured) return; // pas de clé → on garde le mesh gradient
+  feed.querySelectorAll('.slide').forEach(async (slide) => {
+    const layer = slide.querySelector('.slide__photo');
+    if (!layer) return;
+    const src = await fetchPexelsImage(slide.dataset.img);
+    if (!src) return;
+    const pre = new Image();
+    pre.onload = () => { layer.style.backgroundImage = `url("${src}")`; layer.classList.add('is-loaded'); };
+    pre.src = src; // précharge → pas de flash
+  });
+}
+/** Hue déterministe par mot → visuel généré unique et stable. */
+function wordHue(id) { let h = 0; for (const c of id) h = (h * 31 + c.charCodeAt(0)) % 360; return h; }
+function slideHTML(w, i) {
+  const saved = STATE.saved.has(w.id);
+  return `
+  <section class="slide" style="--hue:${wordHue(w.id)}" data-word="${w.term}" data-img="${w.img || w.term}">
+    <div class="slide__bg" data-parallax aria-hidden="true"></div>
+    <div class="slide__photo" data-parallax aria-hidden="true"></div>
+    <div class="slide__scrim" aria-hidden="true"></div>
+    <div class="slide__content">
+      <span class="slide__tag">${w.tag}</span>
+      <button class="audio-orb" aria-label="Écouter ${w.term}" onclick="speak('${w.term}', this)">${icon('i-volume', 30)}</button>
+      <h2 class="slide__word">${w.term}</h2>
+      <p class="slide__phon">${w.phon} · ${w.pos}</p>
+      <p class="slide__def">${w.def}</p>
+      <p class="slide__ex">« ${w.ex} »</p>
+      ${i === 0 ? `<span class="slide__hint">${icon('i-arrow-right', 16)} Fais défiler</span>` : ''}
+    </div>
+    <div class="slide__rail">
+      <button class="rail-btn ${saved ? 'is-saved' : ''}" aria-label="Enregistrer ${w.term}" onclick="toggleSave('${w.id}', this)">
+        ${icon('i-bookmark', 22)}<span>${saved ? 'Enregistré' : 'Garder'}</span>
+      </button>
+      <button class="rail-btn" aria-label="Apprendre ${w.term}" onclick="setView('learn')">
+        ${icon('i-grad', 22)}<span>Apprendre</span>
+      </button>
+      <button class="rail-btn" aria-label="Partager ${w.term}" onclick="toast('Lien copié ✓')">
+        ${icon('i-share', 22)}<span>Partager</span>
+      </button>
+    </div>
+  </section>`;
+}
+/** Parallaxe : le fond généré défile plus lentement que le contenu. */
+function initFeedParallax(feed) {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const slides = [...feed.querySelectorAll('.slide')];
+  let ticking = false;
+  const update = () => {
+    const ch = feed.clientHeight || 1;
+    for (const s of slides) {
+      const rel = (s.offsetTop - feed.scrollTop) / ch; // 0 quand le slide est aligné
+      const t = `translateY(${rel * -14}%) scale(1.2)`;
+      s.querySelectorAll('[data-parallax]').forEach((el) => { el.style.transform = t; });
+    }
+    ticking = false;
+  };
+  feed.addEventListener('scroll', () => {
+    if (!ticking) { requestAnimationFrame(update); ticking = true; }
+  }, { passive: true });
+  update();
 }
 
 /* =============================================================
@@ -434,7 +542,7 @@ function renderNotebook() {
     <article class="tile col gap-3">
       <div class="row between">
         <strong class="h3" style="font-weight:700">${w.term}</strong>
-        <button class="audio-btn" style="width:38px;height:38px" aria-label="Écouter" onclick="speak('${w.term}', this)">${icon('i-volume',18)}</button>
+        <button class="audio-btn" style="width:44px;height:44px" aria-label="Écouter ${w.term}" onclick="speak('${w.term}', this)">${icon('i-volume',18)}</button>
       </div>
       <p class="caption phon">${w.phon}</p>
       <p class="muted caption">${w.def}</p>
@@ -652,9 +760,10 @@ function successScreen(title, sub, cta, action) {
    ============================================================= */
 function barsHTML(data, labels) {
   const max = Math.max(...data);
-  return `<div>
-    <div class="bars">${data.map((v,i)=>`<div class="bar ${i===data.length-1?'':'dim'}" style="height:${(v/max)*100}%" title="${v} mots"></div>`).join('')}</div>
-    <div class="row between caption" style="margin-top:var(--s2)">${labels.map(l=>`<span style="flex:1;text-align:center">${l}</span>`).join('')}</div>
+  const summary = labels.map((l, i) => `${l} : ${data[i]}`).join(', ');
+  return `<div role="img" aria-label="Régularité hebdomadaire — ${summary}">
+    <div class="bars">${data.map((v,i)=>`<div class="bar ${i===data.length-1?'':'dim'}" style="height:${(v/max)*100}%" title="${v}"><span class="bar-val">${v}</span></div>`).join('')}</div>
+    <div class="row between caption" style="margin-top:var(--s2)" aria-hidden="true">${labels.map(l=>`<span style="flex:1;text-align:center">${l}</span>`).join('')}</div>
   </div>`;
 }
 function lineChartHTML(data) {
