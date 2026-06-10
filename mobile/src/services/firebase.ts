@@ -2,7 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getApp, getApps, initializeApp } from "firebase/app";
 // @ts-expect-error getReactNativePersistence is exported but missing from some type bundles
 import { getAuth, getReactNativePersistence, initializeAuth, type Auth } from "firebase/auth";
-import { getFirestore, type Firestore } from "firebase/firestore";
+import { initializeFirestore, type Firestore } from "firebase/firestore";
 import { getStorage, type FirebaseStorage } from "firebase/storage";
 
 const config = {
@@ -29,7 +29,9 @@ if (isFirebaseConfigured) {
     // Already initialized (fast refresh) — reuse existing instance.
     auth = getAuth(app);
   }
-  db = getFirestore(app);
+  // En React Native / Expo Go, le transport WebChannel par défaut de Firestore
+  // pend souvent à la connexion. Forcer le long-polling règle ce blocage.
+  db = initializeFirestore(app, { experimentalForceLongPolling: true });
   storage = getStorage(app);
 }
 
